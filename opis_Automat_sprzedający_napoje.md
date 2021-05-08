@@ -11,15 +11,15 @@ kwotę wrzuconych monet, przyciskiem przerywającym transakcję (wyrzuca
 wrzucone monety), przyciskami 0-9 pozwalającymi wpisać numer wybranego
 towaru oraz polem wyświetlającym wpisany numer towaru.
 Po wybraniu poprawnego numeru towaru:
-Jeśli wrzucono za mało monet, wyskakuje okno z informacją o cenie towaru
+- Jeśli wrzucono za mało monet, wyskakuje okno z informacją o cenie towaru
 oraz (jeśli towar się skończył) o jego braku w automacie.
 - Jeśli wrzucono monety, których wartość jest większa lub równa cenie wybranego
 towaru, automat sprawdza czy towar jest dostępny i czy może wydać resztę
-- Brak towaru: wyskakuje okienko z informacją o braku w automacie.
-- Brak reszty/może wydać wyskakuje okienko z informacją o
+    - Brak towaru: wyskakuje okienko z informacją o braku w automacie.
+    - Brak reszty/może wydać wyskakuje okienko z informacją o
 zakupach, wydaje resztę (dolicza wrzucone monety, odlicza wydane
 jako reszta, odlicza wydany towar), odejmuje towar.
-- Nie może wydać: wyskakuje okienko z napisem "Tylko odliczona kwota".
+    - Nie może wydać: wyskakuje okienko z napisem "Tylko odliczona kwota".
 
 #### Testy
 1. Sprawdzenie ceny jednego towaru - oczekiwana informacja o cenie.
