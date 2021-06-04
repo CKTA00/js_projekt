@@ -23,7 +23,7 @@ class VendingMachine:
     #? Funkcje get i dodaj zostają nadpisane metodami wrzucania monet i odbierania reszty (i/lub produktu)
     #? lub zdefiniowanie innych funkcji i zrezygnowanie z dziedziczenia w tym wypadku
 
-    def _init_(s,lista_produktów,bank=ven.Cash.napełniona_kasa()):
+    def _init_(s,lista_produktów=["Produkt nr. "+str(i) for i in range(30,50)],bank=ven.Cash.equally_filled(100)):
         s._assortment_ = ven.Assortment(lista_produktów,30)
         s._bank_ = bank
         s._inserted_ = ven.Cash.pusta_kasa()

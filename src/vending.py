@@ -1,4 +1,4 @@
-﻿from typing import List
+﻿from typing import List, Tuple
 import math
 #import copy
 
@@ -34,7 +34,7 @@ class Products(ValuableThings):
     """
     def __init__(s,name,price,initial_quantity=0):
         s.name=name
-        super.__init__(s,price,initial_quantity)
+        super(price,initial_quantity)
 
     # def change_quantity(s,q):
     #     """Zmienia ilość produktu (dodaje argument 'q' do ilości) jeśli to możliwe.
@@ -58,7 +58,7 @@ class Coins(ValuableThings):
     """Prosta klasa definująca ilość monet o podanym nominale"""
     def __init__(s,den,ile):
         #s.__waluta__ = waluta #?
-        super.__init__(s,den,ile)
+        super().__init__(den,ile)
 
     # def change_quantity(s,ile):
     #     """Zmienia ilość monet (dodaje argument 'ile' do ilości) jeśli to możliwe.
@@ -98,10 +98,10 @@ class Container:
      Dzięki temu może zawierać ValuableThings posegregowane według ich rodzaju.
     """
     def __init__(s,kinds,things):
-        if(not isinstance(things,List)):
-            raise ValueError("things musi być listą")
-        if(not isinstance(kinds,List)):
-            raise ValueError("kinds musi być listą")
+        if(not isinstance(things,(list,tuple))):
+            raise ValueError("things musi być listą lub krotką")
+        if(not isinstance(kinds,(list,tuple))):
+            raise ValueError("kinds musi być listą lub krotką")
         if(not all(isinstance(p,ValuableThings) for p in things)):
             raise ValueError("wszystkie elementy 'things' muszą być klasy ValuableItem")
         if(len(kinds) != len(things)):
@@ -164,7 +164,7 @@ class Cash(Container):
     def total_value(s):
         """Zwraca sume wartości wszystkich monet"""
         suma = 0.0
-        for m in super()._content_:
+        for m in s._content_:
             suma += m.cumulated_value()
         return suma
 
@@ -193,7 +193,7 @@ class Assortment(Container):
     """
     def __init__(s,lista_produktów,numeruj_od):
         lista_nr=[i+numeruj_od for i in range(len(lista_produktów))]
-        super().__init__(s,lista_nr,lista_produktów)
+        super().__init__(lista_nr,lista_produktów)
 
     def dodaj(*args):
         print("Nie można dodawać produktów do Assortmentu (chyba że jesteś właścicelem") #?
