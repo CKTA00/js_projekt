@@ -21,7 +21,7 @@ class VendingMachineGUI():
         s.numbers = ""
         s.wait_for_ok = wait_for_ok
         s.transaction_mode = False
-        s.vending_machine = vm.VendingMachine()
+        s.vending_machine = vm.VendingMachine.filled_with_random_price()
         s.denoms = vm.denominations
         s.layout(s.root)
         s.root.mainloop()
@@ -96,6 +96,7 @@ class VendingMachineGUI():
                     s.price_text.set(LANG_PODAJ_NR)
                     s.transaction_mode=False
         except vm.LackOfProduct as e:
+            print("Hello")
             messagebox.showinfo("Brak produktu",e)
             s.cancel()
         except vm.CannotGiveRest as e:

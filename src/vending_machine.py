@@ -32,22 +32,26 @@ class NotEnoughPayment(Exception):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
-def get_random_price():
-    r = random.randrange(150,750,5)/100
-    #print(r)
-    return r
+
 
 class VendingMachine:
     """Klasa obsługująca wydawanie produktów i reszty po przyjęciu monet
      od uzytkownika i zwracająca odpowiedni wyjątek w razie niepowodzenia (np. braku produktu)
      
-    """
-    def __init__(s,lista_produktów=[ven.Products("Produkt nr. "+str(i),get_random_price(),5) for i in range(30,50)],bank=ven.Cash.equally_filled(100)):
+    """#!!!
+    def __init__(s,lista_produktów,bank=ven.Cash.equally_filled(100)):
         s._assortment_ = ven.Assortment(lista_produktów,30)
         s._bank_ = bank
         s._inserted_ = ven.Cash.empty()
         s._selected_product_ = 0
         
+    @classmethod
+    def filled_with_random_price(cls,quantity=5):
+        def get_random_price():
+            r = random.randrange(150,750,5)/100
+            return r
+
+        return cls([ven.Products("Produkt nr. "+str(i),get_random_price(),5) for i in range(30,51)])
     
     def get_product(s,product_id: int,q: int=1):
         if(s._inserted_.total_value()<s._assortment_.get_price(product_id)*q):
@@ -85,7 +89,10 @@ class VendingMachine:
                     s._selected_product_=0
                     return p, r
                 except ven.NotEnoughMoney as e:
-                    raise CannotGiveRest("Brak możliwośćiwydania reszty. Prosze odliczyć sume.")
+                    raise CannotGiveRest("Brak możliwośći wydania reszty. Prosze odliczyć sume.")
+                except ven.NotEnoughProductError as e:
+                    print("Hello1")
+                    raise LackOfProduct("Ten produkt się skończył.")  
             else:
                 raise NotEnoughPayment("Wrzucono za mało monet.")
         return None, None
@@ -102,7 +109,7 @@ class VendingMachine:
             raise ValueError("Id produktu musi być cyfrą.")
         if(id<30 or id>50):
             raise IdOutOfRangeError("Nieprawidlowy numer produktu.")
+        s._selected_product_ = id
         if(s._assortment_.check_quantity(id)):
             raise LackOfProduct("Brak produktu.")
-        s._selected_product_ = id
         return s._assortment_.get_price(id)
