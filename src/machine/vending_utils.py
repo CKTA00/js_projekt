@@ -17,9 +17,9 @@ class ValuableThings:
         raise(NotImplementedError("Funkcja take() nie została zaimplementowana!"))
     def take_all(s):
         raise(NotImplementedError("Funkcja take_all() nie została zaimplementowana!"))
-    def cumulated_value(s)->float:
+    def get_total_value(s)->float:
         return s._quantity_ * s._value_ / 10**s._precision_
-    def cumulated_raw_value(s)->int:
+    def get_total_raw_value(s)->int:
         return s._quantity_ * s._value_
     def get_value(s)->float:
         return s._value_/10**s._precision_
@@ -27,6 +27,10 @@ class ValuableThings:
         return s._value_
     def get_quantity(s)->int:
         return s._quantity_
+    def get_formated_value(s)->str:
+        return ("{:."+str(s._precision_)+"f}").format(s.get_value())
+    def get_formated_total_value(s)->str:
+        return ("{:."+str(s._precision_)+"f}").format(s.get_total_value())
     def __repr__(s):
         return "{value="+str(s.get_value())+", quantity="+str(s.get_quantity())+"}"
 
@@ -134,7 +138,6 @@ class Container:
     def add(s,kind,q): #?
         raise(NotImplementedError("funkcja dodaj nie została zaimplementowana"))
 
-
     def take_all(s):
         raise(NotImplementedError("funkcja take_all nie została zaimplementowana"))
 
@@ -191,9 +194,13 @@ class Cash(Container):
 
     def total_value(s):
         """Zwraca sume wartości wszystkich monet"""
+        # suma = 0
+        # for m in s._content_.values():
+        #     suma += m.get_total_raw_value()
+        # return suma/100
         suma = 0.0
         for m in s._content_.values():
-            suma += m.cumulated_value()
+            suma += m.get_total_value()
         return suma
 
     def take_all(s):
@@ -215,7 +222,7 @@ class Cash(Container):
             den = denominations[den_index]
             required_quantity_of_coins = math.floor(value_gr/100/den)
             max_coins = s._content_[den].take(required_quantity_of_coins) #maksymalna liczba monet jednego nominału jaką można wydać
-            value_gr-=max_coins.cumulated_raw_value()
+            value_gr-=max_coins.get_total_raw_value()
             rest.add_coins(max_coins)
             den_index += 1
         return rest

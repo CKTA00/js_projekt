@@ -72,8 +72,8 @@ class VendingMachine:
     #         #GUI: brak produktu
     #         pass
         
-    def inserted(s):
-        return round(s._inserted_.total_value(),2)
+    def inserted(s) -> str:
+        return "{:.2f}".format(s._inserted_.total_value())
 
     def insert_coin(s,den: float) -> Tuple[v_utils.Products,v_utils.Cash]:
         """den - nominał"""
@@ -100,7 +100,6 @@ class VendingMachine:
                 except v_utils.NotEnoughMoney as e:
                     raise CannotGiveRest("Brak możliwośći wydania reszty. Prosze odliczyć sume.")
                 except v_utils.NotEnoughProductError as e:
-                    print("Hello1")
                     raise LackOfProduct("Ten produkt się skończył.")  
             else:
                 raise NotEnoughPayment("Wrzucono za mało monet.")
@@ -112,7 +111,7 @@ class VendingMachine:
         s._selected_product_= 0
         return reszta
 
-    def select_product(s, id: int) -> float:
+    def select_product(s, id: int) -> str:
         """Wybiera produkt o danym id i zwraca jego cene"""
         if(not isinstance(id,int)):
             raise ValueError("Id produktu musi być cyfrą.")
@@ -120,5 +119,6 @@ class VendingMachine:
             raise IdOutOfRangeError("Nieprawidlowy numer produktu.")
         s._selected_product_ = id
         if(s._assortment_.check_quantity(id)):
-            raise LackOfProduct("Brak produktu.")
-        return s._assortment_.get_price(id)
+            pass
+            #raise LackOfProduct("Brak produktu.")
+        return "{:.2f}".format(s._assortment_.get_price(id))

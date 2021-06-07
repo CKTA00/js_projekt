@@ -55,7 +55,7 @@ class VendingMachineGUI():
             try:
                 price = s.vending_machine.select_product(int(s.numbers))
                 s.transaction_mode = True
-                s.price_text.set("cena: "+str(price))
+                s.price_text.set("cena: "+price)
             except vm.IdOutOfRangeError as e:
                 messagebox.showinfo("Nieprawidłowy numer",e)
                 s.numbers = ""
@@ -70,12 +70,12 @@ class VendingMachineGUI():
         s.vending_machine.insert_coin(den)
         if(not s.wait_for_ok):
             s.ok(False)
-        s.screen_text.set("{:.2f}".format(s.vending_machine.inserted()))
+        s.screen_text.set(s.vending_machine.inserted())
         s.numbers="" #anuluj wprowadzanie numeru produktu
 
     def cancel(s):
-        reszta = s.vending_machine.cancel_transaction()
-        messagebox.showinfo("Transakcja anulowana","Automat zwrócił poniższe monety:\n"+str(reszta))
+        rest = s.vending_machine.cancel_transaction()
+        messagebox.showinfo("Transakcja anulowana","Automat zwrócił poniższe monety:\n"+str(rest))
         s.numbers = ""
         s.screen_text.set("")
         s.price_text.set(LANG_PODAJ_NR)
