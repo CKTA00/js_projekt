@@ -1,11 +1,7 @@
-﻿from math import prod
-from os import waitpid
-from tkinter import *
+﻿from tkinter import *
 from tkinter import messagebox
-import time
-from tkinter.font import Font, families
-
-import vending_machine as vm
+from tkinter.font import Font
+from machine import vending_machine as vm
 
 LANG_PODAJ_NR = "wpisz nr. produktu"
 
@@ -21,7 +17,7 @@ class VendingMachineGUI():
         s.numbers = ""
         s.wait_for_ok = wait_for_ok
         s.transaction_mode = False
-        s.vending_machine = vm.VendingMachine.filled_with_random_price()
+        s.vending_machine = vm.VendingMachine.filled(vm.VendingMachine.random_priced_products_generator)
         s.denoms = vm.denominations
         s.layout(s.root)
         s.root.mainloop()
