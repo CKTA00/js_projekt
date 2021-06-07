@@ -2,6 +2,10 @@
 #### Wstęp
 #### Testy
 #### Spełnione założenia projektowe:
+##### klasy:
+
+klasa ValuableThings i klasy z niej dziedziczące przyjmują wartośc w konstruktorze typu float, ale konwertują ją na wartość typu int z zadana precyzją. Dzięki temu możliwe są operacje na dokładnych wartościach bez błędów maszynowch bez potrzeby używania biblioteki Decimal.
+
 ##### elementy szczególne:
 
 generator:

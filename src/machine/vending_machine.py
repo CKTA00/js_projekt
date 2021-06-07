@@ -1,6 +1,6 @@
 ﻿#import imp; imp.reload(modulename)
 from . import vending_utils as v_utils
-from typing import List
+from typing import List, Tuple
 import random
 
 if __name__ == '__main__':
@@ -75,11 +75,11 @@ class VendingMachine:
     def inserted(s):
         return round(s._inserted_.total_value(),2)
 
-    def insert_coin(s,den: str) -> (v_utils.Products,v_utils.Cash):
+    def insert_coin(s,den: float) -> Tuple[v_utils.Products,v_utils.Cash]:
         """den - nominał"""
         # UWAGA: string czy int
         if(isinstance(den,str)):
-            den = float(str)
+            den = float(den)
         if(den not in v_utils.denominations):
             raise ValueError("Nie istnieje moneta o podanym nominale: "+den)
         s._inserted_.add_coins(v_utils.Coins(den,1))

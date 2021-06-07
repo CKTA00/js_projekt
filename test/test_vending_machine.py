@@ -4,19 +4,38 @@ import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src") #windows
 sys.path.append("../src") #pozostałe platformy
 import machine.vending_machine as vm
+from machine import vending_utils as v_utils
 #import machine.vending_utils as v_utils
 
 class TestMachine(unittest.TestCase):
-    def __init__(s):
+    def __init__(s, *args, **kargs):
         s.product_list = [p for p in vm.VendingMachine.random_priced_products_generator()]
+        super().__init__(*args, **kargs)
+    
+    def get_product(s,id: int) -> v_utils.Products:
+        return s.product_list[id-30]
+
+    def set_product(s,id: int,new_product: v_utils.Products) -> None:
+        s.product_list[id-30] = new_product
         
     def test_1(s):
         """Sprawdzenie ceny jednego towaru - oczekiwana informacja o cenie."""
         v = vm.VendingMachine(s.product_list)
+        s.assertAlmostEqual(s.get_product(35).get_value(),v.select_product(35),0.00001)
 
     def test_2(s):
         """Wrzucenie odliczonej kwoty, zakup towaru - oczekiwany brak reszty."""
         v = vm.VendingMachine(s.product_list)
+        s.set_product(35, v_utils.Products("produkt testowy o znanej cenie",6.5,5))
+        v.select_product(35)
+        # przy okazji testowanie różnych typów danych:
+        v.insert_coin("5")
+        v.insert_coin(1) 
+        v.insert_coin(0.5)
+        product, rest = v.accept_transaction()
+        s.assertIsNotNone(product)
+        s.assertEqual(rest.total_value(),0.0)
+        
 
     def test_3(s):
         """Wrzucenie większej kwoty, zakup towaru - oczekiwana reszta."""
@@ -39,7 +58,7 @@ class TestMachine(unittest.TestCase):
          ponowne wybranie poprawnego numeru towaru - oczekiwany brak reszty."""
         v = vm.VendingMachine(s.product_list)
 
-    def test_2(s):
+    def test_8(s):
         """Zakup towaru płacąc po 1 gr - suma stu monet ma być równa 1zł (dla floatów suma sto
          razy 0.01+0.01 +...+0.01 nie będzie równa 1.0). Płatności można dokonać za pomocą pętli for w interpreterze."""
         v = vm.VendingMachine(s.product_list)
