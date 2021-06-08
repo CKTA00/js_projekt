@@ -1,8 +1,9 @@
-﻿import unittest
+﻿# UWAGA: Te testy są tu na wszelki wypadek, gdyby nie udało się zaimportować pakitu machine w pliku z katalogu test
+# Więcej informacji w raporcie w dziale "zaimplementowane testy"
+
+import unittest
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src") #windows
-sys.path.append("../src") #powinno działać na pozostałych platformach
 import machine.vending_machine as vm
 from machine import vending_utils as v_utils
 

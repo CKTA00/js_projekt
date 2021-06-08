@@ -4,20 +4,20 @@ import math
 
 
 class ValuableThings:
-    """Klasa reprezentująca pewną ilość przedmiotów o identycznych cechach, w tym koniecznie wartości za sztuke w PLN.
-        Jak każde przedmioty, można wziąść pewną ich ilość lub wszystkie za co odpoiwadając funkcje wirtualne take i take_all.
-        (Są one wirtualne ponieważ klasy pochodne mogą wykazywać różne zachowanie jeśli podana ilośc do zabrania będzie zbyt duża.
-        W przypadku monet, po prostu weź wszystkie. W przypadku produktów zwróć wyjątek)
+    """Klasa reprezentująca pewną ilość przedmiotów o identycznych cechach, w tym koniecznie wartości za sztuke.
+        Wartość przechowywana jest za pomocą int aby uniknąć błędów maszynowych, lecz może być inicjalizowana i jest zwracana w postaci float.
     """
     def __init__(s,value: float, quantity: int=1,*,precision: int=2):
         s._quantity_ = quantity
         s._precision_ = precision
         s._value_ = int(round(value*10**precision))
-    def take(s,q):
+    def take(s,q: int):
+        """Metoda wirtualna. Powinna implemetować wyciąganie q ilości pzredmiotów."""
         raise(NotImplementedError("Funkcja take() nie została zaimplementowana!"))
-    def take_all(s):
-        raise(NotImplementedError("Funkcja take_all() nie została zaimplementowana!"))
+    # def take_all(s):
+    #     raise(NotImplementedError("Funkcja take_all() nie została zaimplementowana!"))
     def get_total_value(s)->float:
+        """Zwraca całkowitą wartość przedmiotów w postaci float."""
         return s._quantity_ * s._value_ / 10**s._precision_
     def get_total_raw_value(s)->int:
         return s._quantity_ * s._value_
@@ -34,7 +34,7 @@ class ValuableThings:
     def __repr__(s):
         return "{value="+str(s.get_value())+", quantity="+str(s.get_quantity())+"}"
 
-class NotEnoughProductError(RuntimeError):
+class NotEnoughProduct(RuntimeError):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
@@ -62,10 +62,10 @@ class Products(ValuableThings):
 
     def take(s,q):
         """Zwraca prodkut w ilości 'q' i odejmuje od ilości w tym produkcie.
-        Jeśli nie ma na tyle, rzuca wyjątkiem NotEnoughProductError
+        Jeśli nie ma na tyle, rzuca wyjątkiem NotEnoughProduct
         """
         if(q>s.get_quantity()):
-            raise NotEnoughProductError('Nie wystarczająca ilość produktu')
+            raise NotEnoughProduct('Nie wystarczająca ilość produktu')
         s._quantity_-=q
         return Products(s.name,s._value_,q)
 
@@ -102,7 +102,7 @@ class Coins(ValuableThings):
         s._quantity_+=q
 
     def __str__(s):
-        return "Moneta o nominale "+str(s.get_value()) +" "+str(s._waluta_)+" w ilości "+str(s._quantity_)
+        return "Monety o nominale "+str(s.get_value()) +" "+str(s._waluta_)+" w ilości "+str(s._quantity_)
 
 
 
@@ -138,8 +138,8 @@ class Container:
     def add(s,kind,q): #?
         raise(NotImplementedError("funkcja add nie została zaimplementowana"))
 
-    def take_all(s):
-        raise(NotImplementedError("funkcja take_all nie została zaimplementowana"))
+    # def take_all(s):
+    #     raise(NotImplementedError("funkcja take_all nie została zaimplementowana"))
 
 class NotEnoughMoney(RuntimeError):
     def __init__(self, *args: object) -> None:
@@ -209,8 +209,8 @@ class Cash(Container):
             suma += m.get_total_value()
         return suma
 
-    def take_all(s):
-        return Cash(list(s._content_.values()))
+    # def take_all(s):
+    #     return Cash(list(s._content_.values()))
 
     def take_value(s,value):
         """Zwraca obiekt Cash zawierający odliczoną sume tak aby składała się ona z jak najmniejszej liczby monet

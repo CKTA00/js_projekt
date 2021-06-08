@@ -67,7 +67,7 @@ class VendingMachine:
     #         pass
     #     try:
     #         prods = s._assortment_.take(product_id,q) 
-    #     except v_utils.NotEnoughProductError as e:
+    #     except v_utils.NotEnoughProduct as e:
     #         raise LackOfProduct("Ten produkt się skończył.")   
     #         #GUI: brak produktu
     #         pass
@@ -99,14 +99,15 @@ class VendingMachine:
                     return p, r
                 except v_utils.NotEnoughMoney as e:
                     raise CannotGiveRest("Brak możliwośći wydania reszty. Prosze odliczyć sume.")
-                except v_utils.NotEnoughProductError as e:
+                except v_utils.NotEnoughProduct as e:
                     raise LackOfProduct("Ten produkt się skończył.")  
             else:
                 raise NotEnoughPayment("Wrzucono za mało monet.")
         return None, None
 
     def cancel_transaction(s):
-        reszta = s._inserted_.take_all()
+        #reszta = s._inserted_.take_all()
+        reszta = s._inserted_
         s._inserted_ = v_utils.Cash.empty()
         s._selected_product_= 0
         return reszta
