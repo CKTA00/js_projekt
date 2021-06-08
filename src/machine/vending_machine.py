@@ -1,6 +1,6 @@
 ﻿#import imp; imp.reload(modulename)
 from . import vending_utils as v_utils
-from typing import List, Tuple
+from typing import List, Tuple, Type
 import random
 
 if __name__ == '__main__':
@@ -17,18 +17,22 @@ else:
 denominations = v_utils.denominations
 
 class IdOutOfRangeError(Exception):
+    """Wyjątek oznaczający wybranie złego id produktu"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
 class CannotGiveRest(Exception):
+    """Wyjątek oznaczający brak możlwiości wydania reszty"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
 class LackOfProduct(Exception):
+    """Wyjatek oznaczający brak wybranego produktu"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
 class NotEnoughPayment(Exception):
+    """Wyjątek oznaczający brak wystarczającej zapłaty"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
@@ -45,46 +49,35 @@ class VendingMachine:
         s._inserted_ = v_utils.Cash.empty()
         s._selected_product_ = 0
     
-    @staticmethod # TODO: przenieś tą metode do v_utils?? chyba nie bo mamy 30,51
+    @staticmethod
     def random_priced_products_generator(quantity: int=5):
+        """Generuje produkty o losowych cenach, każdy w ilości 'quantity'."""
         for i in range(30,51):
             r = random.randrange(150,750,5)/100
             yield v_utils.Products("Produkt nr. "+str(i),r,quantity)
-    # Użycie tu genratora nie jest przerostem formy nad treścią, bo dzięki niemu możemy się upewnić, że nie zostaną wygenerowane
-    #  produkty z poza zakresu i nie musimy używać range(30,51) (które można by łatwo pomylić z range(30,50) i co zdażyło mi się 
-    #  w czasie procesu tworzenia aplikacji).
-    #  Poprawia też czytelność kodu
-    #  Generator ten jest używany w dwóch miejscach:
-    #  - w metodzie klasowej filled
-    #  - w inicjalizaji testów
 
     @classmethod
-    def filled(cls,price_generator,quantity=5):
+    def filled(cls,price_generator):
+        """Tworzy obiekt VendingMachine o danycn produktach."""
         return cls([p for p in price_generator()])
-    
-    # def get_product(s,product_id: int,q: int=1):
-    #     if(s._inserted_.total_value()<s._assortment_.get_price(product_id)*q):
-    #         pass
-    #     try:
-    #         prods = s._assortment_.take(product_id,q) 
-    #     except v_utils.NotEnoughProduct as e:
-    #         raise LackOfProduct("Ten produkt się skończył.")   
-    #         #GUI: brak produktu
-    #         pass
         
     def inserted(s) -> str:
+        """Zwraca wartość wrzuconych monet, sformatowaną, gotową do wyświetlenia na ekranie."""
         return "{:.2f}".format(s._inserted_.total_value())
 
     def insert_coin(s,den: float) -> Tuple[v_utils.Products,v_utils.Cash]:
-        """den - nominał"""
+        """Wruca 1 monete o nominale 'den' do automatu."""
         # UWAGA: string czy int
         if(isinstance(den,str)):
             den = float(den)
+        if(not isinstance(den,(int,float))):
+            raise TypeError("nominał musi być typu float, int lub string")
         if(den not in v_utils.denominations):
             raise ValueError("Nie istnieje moneta o podanym nominale: "+den)
         s._inserted_.add_coins(v_utils.Coins(den,1))
         
     def accept_transaction(s):
+        """Zatwierdza transakcje, czyli dokona wydania produktu i reszty jeśli wszystkie warunki zostaną spełnione"""
         if(s._selected_product_!=0):
             inserted_value = s._inserted_.total_value()
             product_price = s._assortment_.get_price(s._selected_product_)
@@ -106,14 +99,14 @@ class VendingMachine:
         return None, None
 
     def cancel_transaction(s):
-        #reszta = s._inserted_.take_all()
+        """Anuluj transakcje. Zwraca wrzucone w ramach transakcji monety."""
         reszta = s._inserted_
         s._inserted_ = v_utils.Cash.empty()
         s._selected_product_= 0
         return reszta
 
     def select_product(s, id: int) -> str:
-        """Wybiera produkt o danym id i zwraca jego cene"""
+        """Wybiera produkt o danym id i zwraca jego cenę."""
         if(not isinstance(id,int)):
             raise ValueError("Id produktu musi być cyfrą.")
         if(id<30 or id>50):

@@ -89,6 +89,10 @@ Dodatkowy test sprawdza odpowiedź automatu w przypadku gdy zabraknie monet do w
             [Link]
             
     - wyjątki wyższej warstwy (modułu vending_machine) przechwytujące te niższej warstwy i generujące własne wyjątki z informacją dla użytkownika, które są przechwytywane i obsługiwane przez GUI lub testy:
+        - IdOutOfRangeError rzucany gdy użytkownik wprowadzi nieprawidłowy numer
+
+            [Link]
+
         - CannotGiveRest rzucany gdy automat nie może wydać reszty      
 
             [Link]

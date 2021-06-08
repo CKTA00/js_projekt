@@ -3,9 +3,10 @@ from tkinter import messagebox
 from tkinter.font import Font
 from machine import vending_machine as vm
 
-LANG_PODAJ_NR = "wpisz nr. produktu"
+LANG_PODAJ_NR = "wpisz nr. produktu" # stała używana w kilku miejscach
 
 class VendingMachineGUI():
+    """Klasa obsługująca GUI, łącząca je z funkcjami pakietu machine"""
     def __init__(s,wait_for_ok=False):
         s.root = Tk()
         s.root.title("Automat z napojami")
@@ -24,9 +25,7 @@ class VendingMachineGUI():
         
 
     def layout(s,root: Tk):
-        #s.outputScreenChars = ["0" for i in range(5)]
-        #s.outputScreenChars[2] = "."
-        #s.outputScreen = [Label(root, font=Font(size=40), fg="green", bg="black", text=s.outputScreenChars[i]).grid(column=i,row=0) for i in range(5)]
+        """Inicjalizacja elementów GUI i podpięcie pod nich funkcjonalności"""
         s.output_screen = Label(root, font=Font(size=40), fg="green", bg="black",textvariable=s.screen_text)
         s.output_screen.grid(column=0, row=0, columnspan=3,sticky="ew")
         s.price_screen = Label(root, font=Font(size=20), fg="green", bg="black",textvariable=s.price_text)
@@ -48,6 +47,7 @@ class VendingMachineGUI():
 
 
     def number_click(s,number: int):
+        """Obsługa przycisków z numerami do wyboru produktu."""
         if(len(s.numbers)==0 or len(s.numbers)==2):
             s.numbers = str(number)
         elif(len(s.numbers)==1):
@@ -60,13 +60,14 @@ class VendingMachineGUI():
                 messagebox.showinfo("Nieprawidłowy numer",e)
                 s.numbers = ""
             except vm.LackOfProduct as e:
-                pass #Nie ma prduktu ale kontynuuj! Wiadomość o barku po zapłacie.
+                pass #Nie ma prduktu ale kontynuuj! Wiadomość o barku ma się pojawić po zapłacie.
             if(not s.wait_for_ok):
                 s.ok(False)
         s.screen_text.set(s.numbers)
         
 
     def insert_coin(s,den):
+        """Osługa przycików do wrzucania monet"""
         s.vending_machine.insert_coin(den)
         if(not s.wait_for_ok):
             s.ok(False)
@@ -74,6 +75,7 @@ class VendingMachineGUI():
         s.numbers="" #anuluj wprowadzanie numeru produktu
 
     def cancel(s):
+        """Obsługa przycisku [Anuluj]"""
         rest = s.vending_machine.cancel_transaction()
         messagebox.showinfo("Transakcja anulowana","Automat zwrócił poniższe monety:\n"+str(rest))
         s.numbers = ""
@@ -83,6 +85,7 @@ class VendingMachineGUI():
         pass
 
     def ok(s,inform_user=True):
+        """Obsługa przycisku [OK]. Jeśli wait_for_ok jest False to funkcja ta jest automatycznie wołana w czasie innych akcji"""
         try:
             if(not s.wait_for_ok):
                 product, rest = s.vending_machine.accept_transaction()
@@ -102,12 +105,6 @@ class VendingMachineGUI():
             if(inform_user):
                 messagebox.showinfo("Za mało",e)
             
-
-    
-
+# Rozpocznij skrypt:
 if __name__ == '__main__':
     vgui = VendingMachineGUI()
-else:
-    pass
-    print("Moduł zaimportowany. Generowanie gui wyłączone.")
-    v = vm.VendingMachine()

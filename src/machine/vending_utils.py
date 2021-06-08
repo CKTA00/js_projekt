@@ -275,6 +275,8 @@ class Assortment(Container):
         return (s._content_[id].get_quantity()<=0)
 
     def get_price(s,id: int) -> float:
-        """Zwraca cene produktu"""
+        """Zwraca cene produktu o podanym id"""
+        if(not isinstance(id, int)):
+            raise TypeError("'id' musi byc typu int")
         return s._content_[id].get_value()
 
