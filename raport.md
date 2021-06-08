@@ -1,5 +1,8 @@
 ﻿## Raport z wykonania projektu
 #### Wstęp
+
+Uznałem, że w przypadku braku produktu, accpet_transaction rzuci wyjątek zamiast zwracać czegoś innego od krotki produktu i reszty (np. string). Miałem pomysł aby accept_transaction zawsze zwracał string, który od razu byłby wyświetlany w meassageboxie, co zdjeło by część logiki z gui.py, ale z drugiej strony, gdyby pojawiła się potrzeba użycia modułu vending_machine w innym kontekscie, przydatne mogło by się okazać zwracanie produktu i reszty w postaci obiektów a nie string, które mogły by być np. dodane do obiektu klasy Portfel albo cos w tym stylu. Dlatego postanowiłem zastosować jeden stały typ zwracany i wyjątek z wiadomością w przypadku braku.
+
 #### Testy
 #### Spełnione założenia projektowe:
 ##### klasy:

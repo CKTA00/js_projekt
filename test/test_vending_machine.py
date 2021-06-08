@@ -68,20 +68,51 @@ class TestMachine(unittest.TestCase):
     def test_5(s):
         """Sprawdzenie ceny towaru o nieprawidłowym numerze (<30 lub >50) - oczekiwana informacja o błędzie."""
         v = vm.VendingMachine(s.product_list)
+        #s.assertAlmostEqual(s.get_product(35).get_value(),v.select_product(35),s.max_precision)
+        s.assertRaises(vm.IdOutOfRangeError,v.select_product,25)
+
 
     def test_6(s):
         """Wrzucenie kilku monet, przerwanie transakcji - oczekiwany zwrot monet."""
         v = vm.VendingMachine(s.product_list)
+        coins = v_utils.Cash.empty()
+        coins.add(2,1)
+        coins.add(0.2,1)
+        coins.add(0.02,1)
+        v.insert_coin(2)
+        v.insert_coin(0.2)
+        v.insert_coin(0.02)
+        rest = v.cancel_transaction()
+        s.assertEqual(coins,rest)
 
     def test_7(s):
         """Wrzucenie za małej kwoty, wybranie poprawnego numeru towaru, wrzucenie reszty monet do odliczonej kwoty,
          ponowne wybranie poprawnego numeru towaru - oczekiwany brak reszty."""
+        s.set_product(35, v_utils.Products("produkt testowy o znanej cenie",4.5,5))
         v = vm.VendingMachine(s.product_list)
+        # przy okazji testowanie różnych typów danych:
+        v.insert_coin(2)
+        v.insert_coin(2)
+        v.select_product(35)
+        v.insert_coin(0.5)
+        product, rest = v.accept_transaction()
+        s.assertIsNotNone(product)
+        s.assertAlmostEqual(rest.total_value(),0.0,s.max_precision)
+
 
     def test_8(s):
         """Zakup towaru płacąc po 1 gr - suma stu monet ma być równa 1zł (dla floatów suma sto
          razy 0.01+0.01 +...+0.01 nie będzie równa 1.0). Płatności można dokonać za pomocą pętli for w interpreterze."""
+        s.set_product(35, v_utils.Products("produkt za złotówke",1.0,5))
         v = vm.VendingMachine(s.product_list)
+        v.select_product(35)
+        for i in range(100):
+            v.insert_coin(0.01)
+        product, rest = v.accept_transaction()
+        s.assertIsNotNone(product)
+        s.assertAlmostEqual(rest.total_value(),0.0,s.max_precision)
+        
+
 
 if __name__ == '__main__':
     unittest.main()

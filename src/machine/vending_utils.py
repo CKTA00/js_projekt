@@ -136,7 +136,7 @@ class Container:
         return s._content_[kind].take(q)
 
     def add(s,kind,q): #?
-        raise(NotImplementedError("funkcja dodaj nie została zaimplementowana"))
+        raise(NotImplementedError("funkcja add nie została zaimplementowana"))
 
     def take_all(s):
         raise(NotImplementedError("funkcja take_all nie została zaimplementowana"))
@@ -166,12 +166,12 @@ class Cash(Container):
         """Tworzy obiekt Cash z ilością q monet dla każdego nominału"""
         return cls([Coins(n,q) for n in denominations])
 
-    # def add(s,den,ile):
-    #     """Dodaje daną ilość monet do odpowiej "przegródki"
-    #     """
-    #     if(isinstance(den,str)):
-    #         den = float(den)
-    #     s._content_[den].dodaj(ile)
+    def add(s,den: float,q: int):
+        """Dodaje daną ilość monet do odpowiej "przegródki"
+        """
+        if(isinstance(den,str)):
+            den = float(den)
+        s._content_[den].add(q)
 
     def __add__(s, o):
         if(not isinstance(o, Cash)):
@@ -186,6 +186,12 @@ class Cash(Container):
         for den in denominations:
             r._content_[den].add(o._content_[den].get_quantity()+s._content_[den].get_quantity())
         return r
+
+    def __eq__(s,o):
+        for den in denominations:
+            if(s._content_[den].get_quantity()!=o._content_[den].get_quantity()):
+                return False
+        return True
 
     def add_coins(s,coins: Coins):
         den = coins.get_value()
