@@ -95,7 +95,6 @@ class VendingMachineGUI():
                     s.price_text.set(LANG_PODAJ_NR)
                     s.transaction_mode=False
         except vm.LackOfProduct as e:
-            print("Hello")
             messagebox.showinfo("Brak produktu",e)
             s.cancel()
         except vm.CannotGiveRest as e:

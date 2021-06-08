@@ -3,17 +3,6 @@ from . import vending_utils as v_utils
 from typing import List, Tuple, Type
 import random
 
-if __name__ == '__main__':
-    print("Moduł wewnętrzny automatu z napojami")
-    print(dir())
-else:
-    pass
-    #moduł został zaimportowany, nie wypisuj nic
-
-""" za pomocą #? oznaczyłem cechy nad którch ostateczną implementacją się jeszcze zastanawiam
-    lub zamierzam usunąć jeśli nie zaistnieje potrzeba ich użycia
-"""
-
 denominations = v_utils.denominations
 
 class IdOutOfRangeError(Exception):
@@ -42,12 +31,12 @@ class VendingMachine:
     """Klasa obsługująca wydawanie produktów i reszty po przyjęciu monet
      od uzytkownika i zwracająca odpowiedni wyjątek w razie niepowodzenia (np. braku produktu)
      
-    """#!!!
+    """
     def __init__(s,lista_produktów,bank=v_utils.Cash.equally_filled(100)):
         s._assortment_ = v_utils.Assortment(lista_produktów,30)
-        s._bank_ = bank
+        s._bank = bank
         s._inserted_ = v_utils.Cash.empty()
-        s._selected_product_ = 0
+        s._selected_product = 0
     
     @staticmethod
     def random_priced_products_generator(quantity: int=5):
@@ -78,17 +67,16 @@ class VendingMachine:
         
     def accept_transaction(s):
         """Zatwierdza transakcje, czyli dokona wydania produktu i reszty jeśli wszystkie warunki zostaną spełnione"""
-        if(s._selected_product_!=0):
+        if(s._selected_product!=0):
             inserted_value = s._inserted_.total_value()
-            product_price = s._assortment_.get_price(s._selected_product_)
+            product_price = s._assortment_.get_price(s._selected_product)
             if(inserted_value>=product_price): 
                 try:
-                    p = s._assortment_.take(s._selected_product_,1)
-                    r = s._bank_.take_value(inserted_value-product_price)
-                    s._bank_ = s._bank_ + s._inserted_
-                    #print("BANK: "+str(s._bank_))
+                    p = s._assortment_.take(s._selected_product,1)
+                    r = s._bank.take_value(inserted_value-product_price)
+                    s._bank = s._bank + s._inserted_
                     s._inserted_ = v_utils.Cash.empty()
-                    s._selected_product_=0
+                    s._selected_product=0
                     return p, r
                 except v_utils.NotEnoughMoney as e:
                     raise CannotGiveRest("Brak możliwośći wydania reszty. Prosze odliczyć sume.")
@@ -100,19 +88,25 @@ class VendingMachine:
 
     def cancel_transaction(s):
         """Anuluj transakcje. Zwraca wrzucone w ramach transakcji monety."""
-        reszta = s._inserted_
+        rest = s._inserted_
         s._inserted_ = v_utils.Cash.empty()
-        s._selected_product_= 0
-        return reszta
+        s._selected_product= 0
+        return rest
 
     def select_product(s, id: int) -> str:
-        """Wybiera produkt o danym id i zwraca jego cenę."""
+        """Wybiera produkt o danym id i zwraca jego cenę w postaci sformatowanej gotowej do wyświetlenia."""
         if(not isinstance(id,int)):
             raise ValueError("Id produktu musi być cyfrą.")
         if(id<30 or id>50):
             raise IdOutOfRangeError("Nieprawidlowy numer produktu.")
-        s._selected_product_ = id
+        s._selected_product = id
         if(s._assortment_.check_quantity(id)): #można teoretycznie sprawdzać dostępność produktu tutaj, ale według projektu informacja ta ma się pojawić po zapłacie, która potem zostanie zwrócona
             pass
             #raise LackOfProduct("Brak produktu.")
         return "{:.2f}".format(s._assortment_.get_price(id))
+
+if __name__ == '__main__':
+    print("Moduł wewnętrzny automatu z napojami. Aby użyć utwórz skrypt a w nim obiekt typu VendingMachine")
+else:
+    pass
+    #moduł został zaimportowany, nie wypisuj nic

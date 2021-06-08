@@ -30,8 +30,6 @@ class ValuableThings:
         """Metoda wirtualna. Powinna implemetować wyciąganie q ilości przedmiotów."""
         raise(NotImplementedError("Funkcja take() nie została zaimplementowana!"))
         
-    # def take_all(s):
-    #     raise(NotImplementedError("Funkcja take_all() nie została zaimplementowana!"))
     def get_total_value(s)->float:
         """Zwraca całkowitą wartość przedmiotów w postaci float."""
         return s._quantity * s._value / 10**s._precision_
@@ -60,7 +58,7 @@ class ValuableThings:
         """Zwraca całkowitą wartość w postaci string z uwzględnieniem precyzji"""
         return ("{:."+str(s._precision_)+"f}").format(s.get_total_value())
 
-class NotEnoughProduct(RuntimeError):
+class NotEnoughProduct(Exception):
     """Wyjątek oznaczający brak produktu w obiekcie Products"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
@@ -149,10 +147,7 @@ class Container:
         """
         raise(NotImplementedError("funkcja add nie została zaimplementowana"))
 
-    # def take_all(s):
-    #     raise(NotImplementedError("funkcja take_all nie została zaimplementowana"))
-
-class NotEnoughMoney(RuntimeError):
+class NotEnoughMoney(Exception):
     """Wyjątek oznaczajacy brak możliwości wyciągnięcia pewnej ilości monet"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
@@ -187,9 +182,6 @@ class Cash(Container):
         if(not isinstance(o, Cash)):
             raise ValueError("Do obiektu Cash poeratorem można dodać tylko inny obiekt Cash. Typ innego obiektu: "+str(type(o)))
         r = Cash.empty()
-        # q_denom = len(s._content_.keys()) #ilośc nominałów w s
-        # if(q_denom != len(o._content_.keys())):
-        #     raise ValueError("Nie można dodać obiektów Cash o różnej ilości nominałów")
         if(list(s._content_.keys())!=list(o._content_.keys())):
             raise ValueError("Nie można dodać obiektów Cash o różnych zestawach nominałów")
         for den in denominations:
@@ -219,9 +211,6 @@ class Cash(Container):
         for m in s._content_.values():
             suma += m.get_total_value()
         return suma
-
-    # def take_all(s):
-    #     return Cash(list(s._content_.values()))
 
     def take_value(s,value):
         """Zwraca obiekt Cash zawierający odliczoną sume tak aby składała się ona z jak najmniejszej liczby dostępnych monet.
