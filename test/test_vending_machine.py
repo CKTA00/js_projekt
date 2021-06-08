@@ -5,7 +5,6 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src") #window
 sys.path.append("../src") #pozostałe platformy
 import machine.vending_machine as vm
 from machine import vending_utils as v_utils
-#import machine.vending_utils as v_utils
 
 class TestMachine(unittest.TestCase):
     def __init__(s, *args, **kargs):
@@ -111,8 +110,16 @@ class TestMachine(unittest.TestCase):
         product, rest = v.accept_transaction()
         s.assertIsNotNone(product)
         s.assertAlmostEqual(rest.total_value(),0.0,s.max_precision)
-        
 
+    def test_cannot_give_rest(s):
+        """Dodatkowy test: Utworzenie automatu z pustym bankiem. Zapłacenie za dużo za produkt - oczekiwana informacja o braku możliwości wydania reszty
+        """
+        s.set_product(35, v_utils.Products("produkt testowy o znanej cenie",4.0,5))
+        v = vm.VendingMachine(s.product_list,v_utils.Cash.empty())
+        v.insert_coin(5)
+        v.select_product(35)
+        s.assertRaises(vm.CannotGiveRest,v.accept_transaction)
+        
 
 if __name__ == '__main__':
     unittest.main()
