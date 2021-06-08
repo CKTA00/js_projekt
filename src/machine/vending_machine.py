@@ -119,7 +119,7 @@ class VendingMachine:
         if(id<30 or id>50):
             raise IdOutOfRangeError("Nieprawidlowy numer produktu.")
         s._selected_product_ = id
-        if(s._assortment_.check_quantity(id)):
+        if(s._assortment_.check_quantity(id)): #można teoretycznie sprawdzać dostępność produktu tutaj, ale według projektu informacja ta ma się pojawić po zapłacie, która potem zostanie zwrócona
             pass
             #raise LackOfProduct("Brak produktu.")
         return "{:.2f}".format(s._assortment_.get_price(id))

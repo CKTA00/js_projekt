@@ -5,60 +5,76 @@ import math
 
 class ValuableThings:
     """Klasa reprezentująca pewną ilość przedmiotów o identycznych cechach, w tym koniecznie wartości za sztuke.
-        Wartość przechowywana jest za pomocą int aby uniknąć błędów maszynowych, lecz może być inicjalizowana i jest zwracana w postaci float.
+        Wartość przechowywana jest za pomocą int w jednostce określonej przez precyzje, tak aby uniknąć błędów maszynowych,
+        lecz może być inicjalizowana i zwracana w postaci float.
     """
     def __init__(s,value: float, quantity: int=1,*,precision: int=2):
-        s._quantity_ = quantity
+        if(not isinstance(quantity, int)):
+            raise TypeError("quantity musi być typu int")
+        if(quantity<0):
+            raise ValueError("quantity musi być dodatnie")
+        s._quantity = quantity
+
+        if(not isinstance(precision, int)):
+            raise TypeError("precision musi być typu int")
         s._precision_ = precision
-        s._value_ = int(round(value*10**precision))
+
+        if(not isinstance(value,(int,float))):
+            raise TypeError("precision musi być typu float (lub int)")
+        s._value = int(round(value*10**precision))
+
+    def __repr__(s):
+        return "{value="+str(s.get_value())+", quantity="+str(s.get_quantity())+"}"
+
     def take(s,q: int):
-        """Metoda wirtualna. Powinna implemetować wyciąganie q ilości pzredmiotów."""
+        """Metoda wirtualna. Powinna implemetować wyciąganie q ilości przedmiotów."""
         raise(NotImplementedError("Funkcja take() nie została zaimplementowana!"))
+        
     # def take_all(s):
     #     raise(NotImplementedError("Funkcja take_all() nie została zaimplementowana!"))
     def get_total_value(s)->float:
         """Zwraca całkowitą wartość przedmiotów w postaci float."""
-        return s._quantity_ * s._value_ / 10**s._precision_
+        return s._quantity * s._value / 10**s._precision_
+
     def get_total_raw_value(s)->int:
-        return s._quantity_ * s._value_
+        """Zwraca całkowitą dokładną wartość przemiotów w jednostce przechowywania."""
+        return s._quantity * s._value
+
     def get_value(s)->float:
-        return s._value_/10**s._precision_
+        """Zwraca wartość jednej sztuki w postaci float."""
+        return s._value/10**s._precision_
+ 
     def get_raw_value(s)->int:
-        return s._value_
+        """Zwraca dokładną wartość jednej sztuki w jednostce przechowywania"""
+        return s._value
+ 
     def get_quantity(s)->int:
-        return s._quantity_
+        """Zwraca ilość przedmiotów"""
+        return s._quantity
+ 
     def get_formated_value(s)->str:
+        """Zwraca wartość jednej sztuki w postaci string z uwzględnieniem precyzji"""
         return ("{:."+str(s._precision_)+"f}").format(s.get_value())
+ 
     def get_formated_total_value(s)->str:
+        """Zwraca całkowitą wartość w postaci string z uwzględnieniem precyzji"""
         return ("{:."+str(s._precision_)+"f}").format(s.get_total_value())
-    def __repr__(s):
-        return "{value="+str(s.get_value())+", quantity="+str(s.get_quantity())+"}"
 
 class NotEnoughProduct(RuntimeError):
+    """Wyjątek oznaczający brak produktu w obiekcie Products"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
 class Products(ValuableThings):
-    """Przechowuje informacje o produkcie takie jak jego name i cena za sztuke,
+    """Przechowuje informacje o produkcie takie jak jego nazwa (name) i cena za sztuke,
     ale również ilość sztuk tego produktu np. w asortymencie.
-    Zatem tak na prawdę reprezentuję pewna ilość identycznych produktów, a nie sam rodzaj produktu.
     """
     def __init__(s,name,price,initial_quantity=0,*,precision=2):
         s.name=name
         super().__init__(price,initial_quantity,precision=precision)
 
     def __str__(s):
-        return "Produkt o nazwie \""+s.name +"\" w ilości "+str(s._quantity_)
-
-
-    # def change_quantity(s,q):
-    #     """Zmienia ilość produktu (dodaje argument 'q' do ilości) jeśli to możliwe.
-    #     Argument 'q' może być ujemny.
-    #     """
-    #     s._quantity_ += q
-    #     if(s._quantity_<0):
-    #         print("Brak Sztuk")
-    #         #exception? komunikat o braku
+        return "Produkt o nazwie \""+s.name +"\" w ilości "+str(s._quantity)
 
     def take(s,q):
         """Zwraca prodkut w ilości 'q' i odejmuje od ilości w tym produkcie.
@@ -66,23 +82,14 @@ class Products(ValuableThings):
         """
         if(q>s.get_quantity()):
             raise NotEnoughProduct('Nie wystarczająca ilość produktu')
-        s._quantity_-=q
-        return Products(s.name,s._value_,q)
+        s._quantity-=q
+        return Products(s.name,s._value,q)
 
 class Coins(ValuableThings):
     """Prosta klasa definująca ilość monet o podanym nominale, wartości są przechowywane w int"""
-    def __init__(s,den: float, q: int,*,precision: int=2,waluta: str="PLN"):
+    def __init__(s,den: float, q: int,*,precision: int=2,currency: str="PLN"):
         super().__init__(den,q,precision=precision)
-        s._waluta_ = waluta
-
-    # def change_quantity(s,ile):
-    #     """Zmienia ilość monet (dodaje argument 'ile' do ilości) jeśli to możliwe.
-    #     Argument 'ile' może być ujemny.
-    #     """
-    #     s._quantity_ += ile
-    #     if(s._quantity_<0):
-    #         print("Brak takiej monety")
-    #         #exception? komunikat o braku
+        s._currency = currency
 
     def take(s,q):
         """Zwraca monety w ilości 'q' i odejmuje od ilości monet w tym obiekcie.
@@ -90,23 +97,19 @@ class Coins(ValuableThings):
         """
         if(q>s.get_quantity()):
             q = s.get_quantity()
-        s._quantity_-= q
+        s._quantity-= q
         return Coins(s.get_value(),q)
 
-    #def get_quantity(s):
-        #return s._quantity_
-
     def add(s,q):
+        """Dodaje q sztuk tej moenty do obiektu"""
         if(q<0):
              raise ValueError("Nie można dodać ujemnej ilości monet. Jęsli chcesz je odjąć użyj funkcji take()")
-        s._quantity_+=q
+        s._quantity+=q
 
     def __str__(s):
-        return "Monety o nominale "+str(s.get_value()) +" "+str(s._waluta_)+" w ilości "+str(s._quantity_)
+        return "Monety o nominale "+str(s.get_value()) +" "+str(s._currency)+" w ilości "+str(s._quantity)
 
 
-
-#denominations = (0.01,0.02,0.05,0.1,0.2,0.5,1,2,5)
 denominations = (5,2,1,0.5,0.2,0.1,0.05,0.02,0.01)
 """predefiniowane wartości nominalne monet w PLN"""
 
@@ -117,44 +120,50 @@ class Container:
     """
     def __init__(s,kinds,things):
         if(not isinstance(things,(list,tuple))):
-            raise ValueError("things musi być listą lub krotką")
+            raise ValueError("'things' musi być listą lub krotką.")
+
         if(not isinstance(kinds,(list,tuple))):
-            raise ValueError("kinds musi być listą lub krotką")
+            raise ValueError("'kinds' musi być listą lub krotką.")
+        
         if(not all(isinstance(p,ValuableThings) for p in things)):
             print(things)
-            raise ValueError("wszystkie elementy 'things' muszą być klasy ValuableItem")
+            raise ValueError("wszystkie elementy 'things' muszą być klasy ValuableItem.")
+        
         if(len(kinds) != len(things)):
-            raise ValueError("listy things i kinds muszą mieć taką samą długość")
+            raise ValueError("listy things i kinds muszą mieć taką samą ilość elementów.")
+        
         s._content_ = {kinds[i]:things[i] for i in range(len(things))}
-
-    def _get_thing_(s,kind):
-        return s._content_.get(kind)
 
     def take(s,kind,q):
         """Bierze daną ilość przedmiotów określonego rodzaju i zwraca w postaci obiektu ValuableThings
         """
         return s._content_[kind].take(q)
 
-    def add(s,kind,q): #?
+    def __add__(s, o):
+        """Operator + wirtualny. Powinien implementować dodanie dwóch obiektów dziedziczacych z Container tego samego typu.
+        """
+        raise(NotImplementedError("funkcja add nie została zaimplementowana"))
+
+    def add(s,kind,q):
+        """Metoda wirtualna. Powinna implementować dodanie ilości 'q' do typu 'kind' przedmiotu 
+        """
         raise(NotImplementedError("funkcja add nie została zaimplementowana"))
 
     # def take_all(s):
     #     raise(NotImplementedError("funkcja take_all nie została zaimplementowana"))
 
 class NotEnoughMoney(RuntimeError):
+    """Wyjątek oznaczajacy brak możliwości wyciągnięcia pewnej ilości monet"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
 class Cash(Container):
-    """Klasa przechowywująca pieniądze w postaci posegregowanych według denów monet. Obsługuje tylko zdefiniowane denominations.
+    """Klasa przechowywująca pieniądze w postaci posegregowanych według nominałów monet. Obsługuje tylko nominały przesłane w denominations.
     """
     def __init__(s, coins,den=denominations):
-        """monety = lista monet kolejnych nominałów, domyślnine po 100 monet każdego nominałuu"""
-        if(not isinstance(coins,list)):
-            raise ValueError("Argument coins musi być listą.")
-        if(not all(isinstance(c,Coins) for c in coins)):
-            raise ValueError("Lista coins może składać się wyłącznie z obiektów Coins.")
         super().__init__(den, coins)
+        if(not all(isinstance(c,Coins) for c in coins)):
+            raise ValueError("Lista lub krotka 'coins' może składać się wyłącznie z obiektów Coins.")
 
     @classmethod
     def empty(cls):
@@ -174,13 +183,13 @@ class Cash(Container):
         s._content_[den].add(q)
 
     def __add__(s, o):
+        """Dodaje dwa obiekty cash do siebie dodając poszczególne ilości monet."""
         if(not isinstance(o, Cash)):
             raise ValueError("Do obiektu Cash poeratorem można dodać tylko inny obiekt Cash. Typ innego obiektu: "+str(type(o)))
         r = Cash.empty()
-        q_denom = len(s._content_.keys()) #ilośc nominałów w s
-        if(q_denom != len(o._content_.keys())):
-            raise ValueError("Nie można dodać obiektów Cash o różnej ilości nominałów")
-        #if(all(s._content_.keys()[i] == o._content_.keys()[i] for i in range(q_denom))):
+        # q_denom = len(s._content_.keys()) #ilośc nominałów w s
+        # if(q_denom != len(o._content_.keys())):
+        #     raise ValueError("Nie można dodać obiektów Cash o różnej ilości nominałów")
         if(list(s._content_.keys())!=list(o._content_.keys())):
             raise ValueError("Nie można dodać obiektów Cash o różnych zestawach nominałów")
         for den in denominations:
@@ -188,22 +197,24 @@ class Cash(Container):
         return r
 
     def __eq__(s,o):
+        """Porównuje dwa obiekty Cash uwzględniając ilości nominałów"""
+        if(list(s._content_.keys())!=list(o._content_.keys())):
+            raise False
         for den in denominations:
             if(s._content_[den].get_quantity()!=o._content_[den].get_quantity()):
                 return False
         return True
 
     def add_coins(s,coins: Coins):
+        """Dodaje do obiektu Cash monety w postaci obiektu Coins"""
+        if(not isinstance(coins, Coins)):
+            raise TypeError("'coins' musi być typu Coins")
         den = coins.get_value()
         q = coins.get_quantity()
         s._content_[den].add(q)
 
     def total_value(s):
-        """Zwraca sume wartości wszystkich monet"""
-        # suma = 0
-        # for m in s._content_.values():
-        #     suma += m.get_total_raw_value()
-        # return suma/100
+        """Zwraca sume wartości wszystkich monet wszystkich nominałów"""
         suma = 0.0
         for m in s._content_.values():
             suma += m.get_total_value()
@@ -213,22 +224,28 @@ class Cash(Container):
     #     return Cash(list(s._content_.values()))
 
     def take_value(s,value):
-        """Zwraca obiekt Cash zawierający odliczoną sume tak aby składała się ona z jak najmniejszej liczby monet
+        """Zwraca obiekt Cash zawierający odliczoną sume tak aby składała się ona z jak najmniejszej liczby dostępnych monet.
+        Rzuca wyjątek NotEnoughMoney w przypadku braku możliwości odliczenia sumy.
         """
-        #assert suma>0
+        if(not isinstance(value, (float,int))):
+            raise TypeError("'value' musi być liczbą.")
+
+        if(value < 0):
+            raise ValueError("Nie można wybrać ujemnej ilości pieniędzy")
+
         if(value > s.total_value()):
-            raise NotEnoughMoney()
-        value_gr = int(round(value*100)) #w groszach typu int
+            raise NotEnoughMoney("Brak wystarcającej ilości pieniędzy")
+        value_gr = round(value*100) #dokładna wartość w groszach typu int
         rest = Cash.empty()
         den_index = 0 
+
         while (value_gr>0):
             if(den_index>=len(denominations)):
-                print("Ten błąd nie powinien miec miejsca!")
-                raise NotEnoughMoney()
+                raise NotEnoughMoney("Brak możliwości wybrania odpowiednich nominałów (brak drobnych, nie można wydać malutkiej wartości)")
             den = denominations[den_index]
             required_quantity_of_coins = math.floor(value_gr/100/den)
-            max_coins = s._content_[den].take(required_quantity_of_coins) #maksymalna liczba monet jednego nominału jaką można wydać
-            value_gr-=max_coins.get_total_raw_value()
+            max_coins = s._content_[den].take(required_quantity_of_coins) #max_coins zawiera maksymalną liczbę potrzebnych monet jednego nominału jaką można wydać
+            value_gr -= max_coins.get_total_raw_value()
             rest.add_coins(max_coins)
             den_index += 1
         return rest
@@ -244,14 +261,20 @@ class Cash(Container):
 class Assortment(Container):
     """Klasa przechowywująca wszystkie produkty, posegregowane według ich numeru, wraz z ich ilościami 
     """
-    def __init__(s,product_list,number_from):
+    def __init__(s,product_list: List,number_from: int):
         """product_list - lista produktów, number_from - od jakiej liczby ma ponumerować"""
-        list_nr=[i+number_from for i in range(len(product_list))]
+        if(not isinstance(number_from, int)):
+            raise TypeError("'number_from' musi być typu int")
+        if(not isinstance(product_list,(list))):
+            raise TypeError("'product_list' musi być listą.")
+        list_nr=[i+number_from for i in range(len(product_list))] #List comprehension
         super().__init__(list_nr,product_list)
 
     def check_quantity(s, id: int) -> bool:
+        """Sprawdza czy dany produkt się nie skończył bez rzucania wyjątku"""
         return (s._content_[id].get_quantity()<=0)
 
     def get_price(s,id: int) -> float:
+        """Zwraca cene produktu"""
         return s._content_[id].get_value()
 
