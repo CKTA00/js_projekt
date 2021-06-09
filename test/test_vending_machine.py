@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src") #windows
 sys.path.append("../src") #powinno działać na pozostałych platformach
 import machine.vending_machine as vm
-from machine import vending_utils as v_utils
+import machine.vending_utils as v_utils
 
 class TestMachine(unittest.TestCase):
     def __init__(s, *args, **kargs):
@@ -13,15 +13,16 @@ class TestMachine(unittest.TestCase):
         super().__init__(*args, **kargs)
     
     def get_product(s,id: int) -> v_utils.Products:
+        """Funkcja pomocnicza, zwraca dany produkt"""
         return s.product_list[id-30]
 
     def set_product(s,id: int,new_product: v_utils.Products) -> None:
+        """Funkcja pomocnicza, podmienia produkt na nowy"""
         s.product_list[id-30] = new_product
         
     def test_1(s):
         """Sprawdzenie ceny jednego towaru - oczekiwana informacja o cenie."""
         v = vm.VendingMachine(s.product_list)
-        #s.assertAlmostEqual(s.get_product(35).get_value(),v.select_product(35),s.max_precision)
         s.assertEqual(s.get_product(35).get_formated_value(),v.select_product(35))
 
     def test_2(s):
@@ -66,7 +67,6 @@ class TestMachine(unittest.TestCase):
     def test_5(s):
         """Sprawdzenie ceny towaru o nieprawidłowym numerze (<30 lub >50) - oczekiwana informacja o błędzie."""
         v = vm.VendingMachine(s.product_list)
-        #s.assertAlmostEqual(s.get_product(35).get_value(),v.select_product(35),s.max_precision)
         s.assertRaises(vm.IdOutOfRangeError,v.select_product,25)
 
     def test_6(s):
