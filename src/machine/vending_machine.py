@@ -26,7 +26,6 @@ class NotEnoughPayment(Exception):
         super().__init__(*args)
 
 
-
 class VendingMachine:
     """Klasa obsługująca wydawanie produktów i reszty po przyjęciu monet
      od uzytkownika i zwracająca odpowiedni wyjątek w razie niepowodzenia (np. braku produktu)

@@ -16,6 +16,7 @@ Początowy kod był pisany przeze mnie po polsku, ale został przetłumaczony ze
 Szczególną trudność sprawiły mi próby znalezienia niezależnego od platformy spoasobu na zaimportowanie własnych modołów do testów, gdy znajdują się one w różnych folderach. Więcej o tym w dziele **Zaimplementowane testy**
 
 Projekt na początku obsługiwał wartości pieniężne tylko za pomocą typu float, co później okazało się być przeszkodą ze względu na błędy maszynowe. Metody klas z modułu vending_utils operują na typach int i posiadają dodatkową zmienna precision określającą rząd najmniejszej jednostki pieniężnej. Z zewnątrz modułu można nadal używac jakby był zrobiony na floatach. Ze względu na to, w testach sprawdzanie niektórych wartości odbywa się z pomocą assertAlmostEqual zamiast assertEqual. GUI korzysta z jeszcze innych metod, które od razu formatują wartości do str tak aby nie dochodziło do wyświetlania wartości typu 2.000000000001
+
 ### Opis klas
 
 1. Klasa ValuableThing, Coins i Products
@@ -36,7 +37,7 @@ Projekt na początku obsługiwał wartości pieniężne tylko za pomocą typu fl
 
     Klasa Cash dziedziczy po Container i jest używana jako bank (pieniądze automatu), wrzucone pieniądze, a także obiekt ten jest zwracany jako reszta. Dodaje metody dodawania pieniędzy do obiektu, dodawania obiektów między sobą (operator + [Link])
 
-    Klasa Asortment jest używana jako asortyment automatu. Na razie nie implementuje żadnego dodawania produktów, więc w przypadku wywołania dodawania operatorem lub funkcji add zostanie zwrócony wyjątek z klasy rodzicielskiej. Planowałem dodać uzupełnianie automatu w razie braku produktu, np. po podaniu hasła jako właściciel automatu.
+    Klasa Asortment jest używana jako asortyment automatu. Na razie nie implementuje żadnego dodawania produktów, więc w przypadku wywołania dodawania operatorem lub funkcji add zostanie zwrócony wyjątek. Planowałem dodać uzupełnianie automatu w razie braku produktu, np. po podaniu hasła jako właściciel automatu, ale ostatecznie zrezygnowałem z tego, gdyż konsekwentnie wiązało by się to z dodaniem całkiem nowego systemu właściciela np. wyciągania zebranych przez automat pieniędzy i uzupełniania drobnych wraz zupełnie innym gui, co jest praktycznie drugim podobnej wielkości projektem.
 
 3. Klasa VendingMachine i VendingMachineGUI:
 
@@ -136,6 +137,3 @@ Dodatkowy test nr. 9 sprawdza odpowiedź automatu w przypadku gdy zabraknie mone
 
 ## Autor:
 #### Przemysław Kożuch
-
-
-
