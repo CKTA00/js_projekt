@@ -168,7 +168,7 @@ class Cash(Container):
         if(not all(isinstance(d,(int,float)) for d in den)):
             raise ValueError("Lista lub krotka 'den' może składać się wyłącznie z obiektów float lub int.")
 
-        den.sort(reverse=True)
+        den.sort(reverse=False)
         super().__init__(den, coins)
         if(not all(isinstance(c,Coins) for c in coins)):
             raise ValueError("Lista lub krotka 'coins' może składać się wyłącznie z obiektów Coins.")
