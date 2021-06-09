@@ -36,7 +36,6 @@ class TestMachine(unittest.TestCase):
         product, rest = v.accept_transaction()
         s.assertIsNotNone(product)
         s.assertAlmostEqual(rest.total_value(),0.0,s.max_precision)
-        
 
     def test_3(s):
         """Wrzucenie większej kwoty, zakup towaru - oczekiwana reszta."""
@@ -70,7 +69,6 @@ class TestMachine(unittest.TestCase):
         #s.assertAlmostEqual(s.get_product(35).get_value(),v.select_product(35),s.max_precision)
         s.assertRaises(vm.IdOutOfRangeError,v.select_product,25)
 
-
     def test_6(s):
         """Wrzucenie kilku monet, przerwanie transakcji - oczekiwany zwrot monet."""
         v = vm.VendingMachine(s.product_list)
@@ -97,7 +95,6 @@ class TestMachine(unittest.TestCase):
         product, rest = v.accept_transaction()
         s.assertIsNotNone(product)
         s.assertAlmostEqual(rest.total_value(),0.0,s.max_precision)
-
 
     def test_8(s):
         """Zakup towaru płacąc po 1 gr - suma stu monet ma być równa 1zł (dla floatów suma sto

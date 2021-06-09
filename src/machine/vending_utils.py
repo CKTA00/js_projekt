@@ -71,6 +71,7 @@ class ValuableThings:
         return ("{:."+str(s._precision_)+"f}").format(s.get_total_value())
 
 
+
 class Products(ValuableThings):
     """Przechowuje informacje o produkcie takie jak jego nazwa (name) i cena za sztuke,
     ale również ilość sztuk tego produktu np. w asortymencie.
@@ -90,6 +91,7 @@ class Products(ValuableThings):
             raise NotEnoughProduct('Nie wystarczająca ilość produktu.')
         s._quantity-=q
         return Products(s.name,s._value,q)
+
 
 class Coins(ValuableThings):
     """Prosta klasa definująca ilość monet o podanym nominale, wartości są przechowywane w int."""
@@ -118,6 +120,7 @@ class Coins(ValuableThings):
 
 denominations = (5,2,1,0.5,0.2,0.1,0.05,0.02,0.01)
 """Predefiniowane wartości nominalne monet w PLN."""
+
 
 class Container:
     """Klasa zawieracjąca definująca słownik zawierający identyfikatory rodzaju (key)
@@ -248,7 +251,7 @@ class Cash(Container):
             if(n.get_quantity()>0):
                 string += str(n)+"\n"
         return string
-            
+
 
 class Assortment(Container):
     """Klasa przechowywująca wszystkie produkty, posegregowane według ich numeru, wraz z ich ilościami.

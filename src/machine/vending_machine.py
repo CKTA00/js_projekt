@@ -104,8 +104,9 @@ class VendingMachine:
             #raise LackOfProduct("Brak produktu.")
         return "{:.2f}".format(s._assortment_.get_price(id))
 
+
 if __name__ == '__main__':
-    print("Moduł wewnętrzny automatu z napojami. Aby użyć utwórz skrypt a w nim obiekt typu VendingMachine")
+    print("Moduł wewnętrzny automatu z napojami. Aby go użyć - utwórz skrypt a w nim obiekt typu VendingMachine")
 else:
     pass
     #moduł został zaimportowany, nie wypisuj nic
