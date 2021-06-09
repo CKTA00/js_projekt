@@ -118,7 +118,7 @@ class Coins(ValuableThings):
         return "Monety o nominale "+str(s.get_value()) +" "+str(s._currency)+" w ilości "+str(s._quantity)
 
 
-denominations = (5,2,1,0.5,0.2,0.1,0.05,0.02,0.01)
+denominations = [5,2,1,0.5,0.2,0.1,0.05,0.02,0.01]
 """Predefiniowane wartości nominalne monet w PLN."""
 
 
@@ -162,6 +162,13 @@ class Cash(Container):
     """Klasa przechowywująca pieniądze w postaci posegregowanych według nominałów monet. Obsługuje tylko nominały przesłane w 'den'.
     """
     def __init__(s, coins,den=denominations):
+        if(not isinstance(den,(list))):
+            raise ValueError("'den' musi być listą.")
+
+        if(not all(isinstance(d,(int,float)) for d in den)):
+            raise ValueError("Lista lub krotka 'den' może składać się wyłącznie z obiektów float lub int.")
+
+        den.sort(reverse=True)
         super().__init__(den, coins)
         if(not all(isinstance(c,Coins) for c in coins)):
             raise ValueError("Lista lub krotka 'coins' może składać się wyłącznie z obiektów Coins.")
