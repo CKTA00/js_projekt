@@ -95,12 +95,33 @@ Dodatkowy test nr. 9 sprawdza odpowiedź automatu w przypadku gdy zabraknie mone
 3. Klasy (dokładniej opisane wyżej w dziale **Opis klas**):
     - 6 klas nie będących wyjątkami w module vending_utils (4 dziedziczą z pozostałych):
         - ValuableThings
+
+            https://github.com/CKTA00/js_projekt/blob/deff3a28231f862c96998d993d3faee5c359936e/src/machine/vending_utils.py#L18
+        
         - Coins (dziedziczy z ValuableThings)
+
+            https://github.com/CKTA00/js_projekt/blob/deff3a28231f862c96998d993d3faee5c359936e/src/machine/vending_utils.py#L96
+
         - Products (dziedziczy z ValuableThings)
+
+            https://github.com/CKTA00/js_projekt/blob/deff3a28231f862c96998d993d3faee5c359936e/src/machine/vending_utils.py#L75
+
         - Container
+
+            https://github.com/CKTA00/js_projekt/blob/deff3a28231f862c96998d993d3faee5c359936e/src/machine/vending_utils.py#L125
+
         - Cash (dziedziczy z Container)
+
+            https://github.com/CKTA00/js_projekt/blob/deff3a28231f862c96998d993d3faee5c359936e/src/machine/vending_utils.py#L161
+
         - Assortment (dziedziczy z Container)
+
+            https://github.com/CKTA00/js_projekt/blob/deff3a28231f862c96998d993d3faee5c359936e/src/machine/vending_utils.py#L256
+           
     - klasa VendingMachine korzystająca z modułu vending_utils w swoim własnym module
+    
+        https://github.com/CKTA00/js_projekt/blob/deff3a28231f862c96998d993d3faee5c359936e/src/machine/vending_machine.py#L31
+    
     - powyższa całość w postaci pakietu jest wykorzystywana przez klasę VendingMachineGUI odpowiedzialną za interfejs użytkownika
     - ten sam pakiet używany jest do testowania
 
