@@ -1,9 +1,10 @@
-﻿#import imp; imp.reload(modulename)
 from . import vending_utils as v_utils
 from typing import List, Tuple, Type
 import random
 
 denominations = v_utils.denominations
+
+# Wyjątki:
 
 class IdOutOfRangeError(Exception):
     """Wyjątek oznaczający wybranie złego id produktu"""
@@ -25,7 +26,8 @@ class NotEnoughPayment(Exception):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
-
+# Klasa właściwa
+        
 class VendingMachine:
     """Klasa obsługująca wydawanie produktów i reszty po przyjęciu monet
      od uzytkownika i zwracająca odpowiedni wyjątek w razie niepowodzenia (np. braku produktu)
@@ -55,7 +57,6 @@ class VendingMachine:
 
     def insert_coin(s,den: float) -> Tuple[v_utils.Products,v_utils.Cash]:
         """Wruca 1 monete o nominale 'den' do automatu."""
-        # UWAGA: string czy int
         if(isinstance(den,str)):
             den = float(den)
         if(not isinstance(den,(int,float))):
