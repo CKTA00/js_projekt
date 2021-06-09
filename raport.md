@@ -35,7 +35,7 @@ Projekt na początku obsługiwał wartości pieniężne tylko za pomocą typu fl
 
     Obiekty tej klasy są zdolne do przechowywania kilku rodzajów przedmiotów, czyli kilku instancji odpowiednio ValuableThings, Coins i Products. Informacja o ich ilości już znajduje się w tych obiektach
 
-    Klasa Cash dziedziczy po Container i jest używana jako bank (pieniądze automatu), wrzucone pieniądze, a także obiekt ten jest zwracany jako reszta. Dodaje metody dodawania pieniędzy do obiektu, dodawania obiektów między sobą (operator + [Link])
+    Klasa Cash dziedziczy po Container i jest używana jako bank (pieniądze automatu), wrzucone pieniądze, a także obiekt ten jest zwracany jako reszta. Dodaje metody dodawania pieniędzy do obiektu, dodawania obiektów między sobą (operator + https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_utils.py#L186)
 
     Klasa Asortment jest używana jako asortyment automatu. Na razie nie implementuje żadnego dodawania produktów, więc w przypadku wywołania dodawania operatorem lub funkcji add zostanie zwrócony wyjątek. Planowałem dodać uzupełnianie automatu w razie braku produktu, np. po podaniu hasła jako właściciel automatu, ale ostatecznie zrezygnowałem z tego, gdyż konsekwentnie wiązało by się to z dodaniem całkiem nowego systemu właściciela np. wyciągania zebranych przez automat pieniędzy i uzupełniania drobnych wraz zupełnie innym gui, co jest praktycznie drugim podobnej wielkości projektem.
 
@@ -53,11 +53,11 @@ Dodatkowy test nr. 9 sprawdza odpowiedź automatu w przypadku gdy zabraknie mone
 
 - **dodatkowy test** (opisany wyżej)
 
-    [link]
+    https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/test/test_vending_machine.py#L111
 
 - **generator** 
 
-    [link]
+    https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_machine.py#L41
 
     Użycie tu generatora nie jest tu przerostem formy nad treścią, bo dzięki niemu możemy się upewnić, że nie zostaną wygenerowane produkty z poza zakresu i nie musimy używać range(30,51) w wielu miejscach jednocześnie (które można by łatwo pomylić z range(30,50) i co zdażyło mi się w czasie procesu tworzenia aplikacji). Poprawia też czytelność kodu.
 
@@ -67,24 +67,30 @@ Dodatkowy test nr. 9 sprawdza odpowiedź automatu w przypadku gdy zabraknie mone
 
 - **użycie wbudowanych dekoratorów**
 
-    [link]
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_machine.py#L40
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_machine.py#L47
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_utils.py#L169
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_utils.py#L174
 
     Oznaczenie metod jako metody klasowe pozwoliło na wygodne tworzenie obiektów np. pustych lub wypełnionych produktami o losowych cenach bez stosowania list comprehension w każdym wywołaniu konstruktora danej klasy.
 
 ## Spełnione wymagania projektowe
 
 1. Wyrażenia lambda:
-    - [link]
-    - [link]
-    - [link]
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/gui.py#L31
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/gui.py#L32
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/gui.py#L38
 
 2. List comprehensions:
-    - [link]
-    - [link]
-    - [link]
-    - [link]
-    - [link]
-    - [link]
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/gui.py#L31
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/gui.py#L38
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_utils.py#L172
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_utils.py#L177
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_utils.py#L265
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_machine.py#L50
+   
+   Dictionary comprehension:
+    - https://github.com/CKTA00/js_projekt/blob/8e41448d4fea8bae5cb87b2766a6448923f17940/src/machine/vending_utils.py#L143
 
 3. Klasy (dokładniej opisane wyżej w dziale **Opis klas**):
     - 6 klas nie będących wyjątkami w module vending_utils (4 dziedziczą z pozostałych):
@@ -99,36 +105,36 @@ Dodatkowy test nr. 9 sprawdza odpowiedź automatu w przypadku gdy zabraknie mone
     - ten sam pakiet używany jest do testowania
 
     - metody wirtualne:
-        - [link]
-        - [link]
-        - [link]
+        - https://github.com/CKTA00/js_projekt/blob/b1ad19ca43417eb62f2039fcbd69c951f703b522/src/machine/vending_utils.py#L41
+        - https://github.com/CKTA00/js_projekt/blob/b1ad19ca43417eb62f2039fcbd69c951f703b522/src/machine/vending_utils.py#L150
+        - https://github.com/CKTA00/js_projekt/blob/b1ad19ca43417eb62f2039fcbd69c951f703b522/src/machine/vending_utils.py#L155
 
 4. Wyjątki:
     - wyjątki niskiej warstwy (modułu venidng_utils)
         - NotEnoughMoney rzucany przez obiekt Cash w przypadku gdy podana wartość do wybrania przekracza jej zasoby
         
-            [Link]
+            https://github.com/CKTA00/js_projekt/blob/b1ad19ca43417eb62f2039fcbd69c951f703b522/src/machine/vending_utils.py#L11
 
         - NotEnoughProduct rzucany przez obiekt Assortment gdy brakło danego produktu
                 
-            [Link]
+            https://github.com/CKTA00/js_projekt/blob/b1ad19ca43417eb62f2039fcbd69c951f703b522/src/machine/vending_utils.py#L6
             
     - wyjątki wyższej warstwy (modułu vending_machine) przechwytujące te niższej warstwy i generujące własne wyjątki z informacją dla użytkownika, które są przechwytywane i obsługiwane przez GUI lub testy:
         - IdOutOfRangeError rzucany gdy użytkownik wprowadzi nieprawidłowy numer
 
-            [Link]
+            https://github.com/CKTA00/js_projekt/blob/b1ad19ca43417eb62f2039fcbd69c951f703b522/src/machine/vending_machine.py#L9
 
         - CannotGiveRest rzucany gdy automat nie może wydać reszty      
 
-            [Link]
+            https://github.com/CKTA00/js_projekt/blob/b1ad19ca43417eb62f2039fcbd69c951f703b522/src/machine/vending_machine.py#L14
             
         - LackOfProduct rzucany gdy automat wykrył brak wybranego produktu
                 
-            [Link]
+            https://github.com/CKTA00/js_projekt/blob/b1ad19ca43417eb62f2039fcbd69c951f703b522/src/machine/vending_machine.py#L19
             
         - NotEnoughPayment rzucany gdy użytkownik próbuje zaakceptować transakcje za którą za mało zapłacił
                 
-            [Link]
+            https://github.com/CKTA00/js_projekt/blob/b1ad19ca43417eb62f2039fcbd69c951f703b522/src/machine/vending_machine.py#L24
 
     - poza tym liczne rzucane i nie przechwytywane wyjątki typu ValueError i TypeError w przypadku podania nieprawidłowych danych do funkcji. Mają one informować developera o nieprawidłowym użyciu funkcji.
             
